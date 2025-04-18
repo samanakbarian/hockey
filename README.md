@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Björklövens Hockeystatistik
 
-## Getting Started
+En webbapplikation som visar statistik för Björklövens lag med tabeller, grafer och detaljerade spelardata. Applikationen använder Next.js, SQLite och Chart.js.
 
-First, run the development server:
+## Funktioner
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Spelarstatistik:** Tabeller med detaljerade spelarprestationer
+- **Visualiseringar:** Poängtoppar och utveckling över tid
+- **Filtrering:** Möjlighet att filtrera baserat på position (F/D/G)
+- **Sortering:** Anpassningsbara tabeller med olika sorteringsalternativ
+- **Detaljvy:** Möjlighet att se enskilda spelares utveckling under säsongen
+
+## Teknisk översikt
+
+Projektet är byggt med:
+
+- **Next.js 15:** Fullstacklösning med både frontend och API
+- **SQLite:** Lokal databaslagring via better-sqlite3
+- **Chart.js:** Visualisering av spelarstatistik
+- **Tailwind CSS:** Styling och responsiv design
+
+## Databasintegration
+
+Applikationen använder en SQLite-databas (hockeystats.db) för att lagra och hämta spelstatistik. Följande tabeller används:
+
+- **DimSpelare:** Spelarinformation (ID, namn, position, nummer)
+- **FaktaSpelarStatistik:** Statistik per spelare och match
+- **DimMatch:** Information om matcher (datum, motståndare, etc.)
+
+### API-endpoints
+
+Följande API-endpoints har implementerats för att kommunicera med databasen:
+
+- `/api/players` - Hämtar alla spelare med totala statistikvärden
+- `/api/player/[id]` - Hämtar detaljerad information om en specifik spelare
+- `/api/topscorers` - Returnerar topp 10 poängplockare
+- `/api/progression?id=X` - Returnerar poängutveckling över tid för en spelare
+- `/api/stats?position=Y` - Filtrerar spelare baserat på position
+
+### Datamodeller
+
+För att hantera data mellan API och frontend används följande modeller:
+
+```typescript
+// API-spelare
+interface ApiPlayer {
+  SpelarId: number;
+  Namn: string;
+  Nummer: number;
+  Position: 'F' | 'D' | 'G';
+  Goals: number;
+  // ...övriga fält
+}
+
+// Frontend-spelare
+interface PlayerStat {
+  id: number;
+  name: string;
+  position: 'F' | 'D' | 'G';
+  // ...övriga fält
+}
+
+// Visualiseringsmodell
+interface Spelare {
+  namn: string;
+  position: 'F' | 'D' | 'G';
+  // ...övriga fält
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Kom igång
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Förutsättningar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+ 
+- Databas (hockeystats.db) placerad i projektroten
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Klona projektet
+2. Installera beroenden:
+   ```
+   npm install
+   ```
+3. Starta utvecklingsservern:
+   ```
+   npm run dev
+   ```
+4. Öppna [http://localhost:3000](http://localhost:3000) i din webbläsare
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Databaskonfiguration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Databasanslutningen konfigureras i `lib/db.ts`:
 
-## Deploy on Vercel
+```typescript
+import Database from 'better-sqlite3';
+import path from 'path';
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+const dbPath = path.join(process.cwd(), 'hockeystats.db');
+const db = new Database(dbPath, { verbose: console.log });
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+export default db;
+```
+
+## Projektstruktur
+
+```
+hockey/
+├── app/              # Next.js App Router
+│   └── spelare/      # Spelarstatistiksida
+├── components/       # React-komponenter
+│   ├── ui/           # Återanvändbara UI-komponenter
+│   ├── PlayerStatsTable.tsx
+│   ├── PoängligaChart.tsx
+│   └── PoängutvecklingChart.tsx
+├── lib/              # Hjälpbibliotek
+│   ├── api.ts        # API-hjälpfunktioner
+│   ├── db.ts         # Databasanslutning
+│   └── types.ts      # Typdefiniton
+├── models/           # Datamodeller
+│   ├── playerStat.ts # PlayerStat-modell och API
+│   └── spelare.ts    # Spelare-modell och API
+├── pages/            # Next.js Pages Router
+│   └── api/          # API-endpoints
+│       ├── player/[id].ts
+│       ├── players.ts
+│       ├── progression.ts
+│       ├── stats.ts
+│       └── topscorers.ts
+└── public/           # Statiska filer
+```
+
+## Felhantering
+
+Applikationen innehåller robusta fellhanteringsfunktioner för databaskommunikation. Om databasanslutning misslyckas eller om data saknas, används fallback-data för att säkerställa att användargränssnittet ändå visas korrekt.
+
+## Framtida förbättringar
+
+- Implementera caching för API-anrop
+- Lägga till autentisering för administratörsfunktioner
+- Förbättra prestanda på SQL-queries vid större datamängder
+- Migrering till PostgreSQL för produktionsdeployment
