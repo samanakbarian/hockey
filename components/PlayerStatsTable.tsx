@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { PlayerStat } from '@/lib/types';
 import Link from 'next/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -111,31 +111,31 @@ export function PlayerStatsTable({ playerStats }: PlayerStatsTableProps) {
     if (positionFilter === 'G') {
       return (
         <TableRow>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('number')}>#</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('name')}>Spelare</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('gamesPlayed')}>GP</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('savePctg')}>SV%</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('goalsAgainstAvg')}>GAA</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('wins')}>W</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('losses')}>L</TableHeader>
-          <TableHeader className="cursor-pointer" onClick={() => handleSort('shutouts')}>SO</TableHeader>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('number')}>#</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('name')}>Spelare</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('gamesPlayed')}>GP</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('savePctg')}>SV%</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('goalsAgainstAvg')}>GAA</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('wins')}>W</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('losses')}>L</TableHead>
+          <TableHead className="cursor-pointer" onClick={() => handleSort('shutouts')}>SO</TableHead>
         </TableRow>
       );
     }
     
     return (
       <TableRow>
-        <TableHeader className="cursor-pointer" onClick={() => handleSort('number')}>#</TableHeader>
-        <TableHeader className="cursor-pointer" onClick={() => handleSort('name')}>Spelare</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('position')}>Pos</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('gamesPlayed')}>GP</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('goals')}>G</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('assists')}>A</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('points')}>TP</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('plusMinus')}>+/-</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('penaltyMinutes')}>PIM</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('powerPlayGoals')}>PPG</TableHeader>
-        <TableHeader className="text-center cursor-pointer" onClick={() => handleSort('shots')}>SOG</TableHeader>
+        <TableHead className="cursor-pointer" onClick={() => handleSort('number')}>#</TableHead>
+        <TableHead className="cursor-pointer" onClick={() => handleSort('name')}>Spelare</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('position')}>Pos</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('gamesPlayed')}>GP</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('goals')}>G</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('assists')}>A</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('points')}>TP</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('plusMinus')}>+/-</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('penaltyMinutes')}>PIM</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('powerPlayGoals')}>PPG</TableHead>
+        <TableHead className="text-center cursor-pointer" onClick={() => handleSort('shots')}>SOG</TableHead>
       </TableRow>
     );
   };
